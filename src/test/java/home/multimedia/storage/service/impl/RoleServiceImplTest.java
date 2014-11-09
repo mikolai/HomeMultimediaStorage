@@ -19,9 +19,8 @@ import static org.junit.Assert.assertNull;
  * Created by nick on 6/8/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:/spring/servlet-context.xml")
+@ContextConfiguration("classpath:/spring/business-config.xml")
 public class RoleServiceImplTest {
-
     @Autowired
     private RoleService roleService;
 
@@ -37,7 +36,7 @@ public class RoleServiceImplTest {
 
     @Test
     public void canGetRole() {
-        final int expectedRoleId = 1;
+        final Integer expectedRoleId = 1;
         Role expectedRole = getRoles().get(expectedRoleId - 1);
 
         Role actualRole = roleService.getRole(expectedRoleId);
@@ -89,7 +88,7 @@ public class RoleServiceImplTest {
 
     @Test
     public void canUpdateRole() {
-        final int roleId = 1;
+        final Integer roleId = 1;
         final String newRoleName = "updated_role";
         String roleName;
 

@@ -14,7 +14,7 @@
 	    <param name="append" value="false" />
 	    <param name="maxFileSize" value="10MB" />
 	    <param name="maxBackupIndex" value="10" />
-	    <param name="file" value="/media/426CCEC76CCEB4C7/projects/HomeMultimediaStorage/logs/application.log" />
+	    <param name="file" value="/media/767ABE2F7ABDEC4D/projects/HomeMultimediaStorage/logs/application.log" />
 	    <layout class="org.apache.log4j.PatternLayout">
 		<param name="ConversionPattern" 
 			value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />

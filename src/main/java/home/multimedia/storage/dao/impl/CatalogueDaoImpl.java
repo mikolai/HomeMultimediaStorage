@@ -2,12 +2,10 @@ package home.multimedia.storage.dao.impl;
 
 import home.multimedia.storage.dao.CatalogueDao;
 import home.multimedia.storage.domain.Catalogue;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -15,36 +13,39 @@ import java.util.List;
  */
 @Repository("catalogueDao")
 public class CatalogueDaoImpl implements CatalogueDao {
-
-    private SessionFactory sessionFactory;
-
-    @Autowired
-    public CatalogueDaoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    public Session getCurrentSession() {
-        return sessionFactory.getCurrentSession();
-    }
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public void save(Catalogue entity) {
-        getCurrentSession().saveOrUpdate(entity);
+        if (entity.isNew()) {
+            this.em.persist(entity);
+        } else {
+            this.em.merge(entity);
+        }
     }
 
     @Override
-    public Catalogue read(Integer id) {
-        return (Catalogue) getCurrentSession().getNamedQuery("Catalogue.selectCatalogueWithDetails").setParameter("id", id).uniqueResult();
+    public Catalogue findById(Integer id) {
+        List<Catalogue> entities = em.createQuery("select distinct c from Catalogue c left join fetch c.parent p left join fetch c.childrens cs left join fetch c.photos ps left join fetch c.user u where c.id = :id")
+                .setParameter("id", id)
+                .getResultList();
+        if (entities.size() == 0) {
+            return null;
+        }
+        return entities.get(0);
     }
 
     @SuppressWarnings("unchecked")
-	@Override
-    public List<Catalogue> read() {
-        return getCurrentSession().getNamedQuery("Catalogue.selectCataloguesWithDetails").list();
+    @Override
+    public List<Catalogue> findAll() {
+        return em.createQuery("select distinct c from Catalogue c left join fetch c.parent p left join fetch c.childrens cs left join fetch c.photos ps left join fetch c.user u")
+                .getResultList();
     }
 
     @Override
     public void delete(Catalogue entity) {
-        getCurrentSession().delete(entity);
+        entity = em.merge(entity);
+        em.remove(entity);
     }
 }

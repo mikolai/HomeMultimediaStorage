@@ -21,9 +21,8 @@ import static org.junit.Assert.assertNull;
  * Created by nick on 6/10/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:/spring/servlet-context.xml")
+@ContextConfiguration("classpath:/spring/business-config.xml")
 public class CatalogueServiceImplTest {
-
     @Autowired
     private CatalogueService catalogueService;
     @Autowired
@@ -47,7 +46,7 @@ public class CatalogueServiceImplTest {
 
     @Test
     public void canGetCatalogue() {
-        final int expectedCatalogueId = 1;
+        final Integer expectedCatalogueId = 1;
         final Catalogue expectedCatalogue = getCatalogues().get(expectedCatalogueId - 1);
 
         Catalogue actualCatalogue = catalogueService.getCatalogue(expectedCatalogueId);
@@ -113,7 +112,7 @@ public class CatalogueServiceImplTest {
 
     @Test
     public void canUpdateCatalogue() {
-        final int catalogueId = 1;
+        final Integer catalogueId = 1;
         final String newCatalogueName = "updated_catalogue";
         String catalogueName;
 

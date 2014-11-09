@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
     @Transactional(readOnly = true)
     @Override
     public User getUser(int id) {
-        return userDao.read(id);
+        return userDao.findById(id);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService, InitializingBean {
     @Transactional(readOnly = true)
     @Override
     public List<User> getUsers() {
-        return userDao.read();
+        return userDao.findAll();
     }
 
     @Transactional

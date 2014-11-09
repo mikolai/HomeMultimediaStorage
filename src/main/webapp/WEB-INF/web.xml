@@ -5,6 +5,16 @@
          http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
     <display-name>Home Multimedia Storage</display-name>
 
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring/business-config.xml, classpath:spring/security-config.xml</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
     <!-- Spring MVC -->
     <servlet>
         <servlet-name>mvc-dispatcher</servlet-name>
@@ -12,8 +22,7 @@
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>
-                classpath:spring/servlet-context.xml,
-                classpath:spring/security.xml
+                classpath:spring/mvc-core-config.xml
             </param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
@@ -23,18 +32,6 @@
         <servlet-name>mvc-dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>
-            classpath:spring/servlet-context.xml,
-            classpath:spring/security.xml
-        </param-value>
-    </context-param>
 
     <!-- Spring Security -->
     <filter>

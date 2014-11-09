@@ -2,12 +2,10 @@ package home.multimedia.storage.dao.impl;
 
 import home.multimedia.storage.dao.PhotoDao;
 import home.multimedia.storage.domain.Photo;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -15,36 +13,39 @@ import java.util.List;
  */
 @Repository("photoDao")
 public class PhotoDaoImpl implements PhotoDao {
-
-    private SessionFactory sessionFactory;
-
-    @Autowired
-    public PhotoDaoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    public Session getCurrentSession() {
-        return sessionFactory.getCurrentSession();
-    }
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public void save(Photo entity) {
-        getCurrentSession().saveOrUpdate(entity);
+        if (entity.isNew()) {
+            this.em.persist(entity);
+        } else {
+            this.em.merge(entity);
+        }
     }
 
     @Override
-    public Photo read(Integer id) {
-        return (Photo) getCurrentSession().getNamedQuery("Photo.selectPhotoWithDetails").setParameter("id", id).uniqueResult();
+    public Photo findById(Integer id) {
+        List<Photo> entities = em.createQuery("select distinct p from Photo p left join fetch p.catalogue left join fetch p.user where p.id = :id")
+                .setParameter("id", id)
+                .getResultList();
+        if (entities.size() == 0) {
+            return null;
+        }
+        return entities.get(0);
     }
 
     @SuppressWarnings("unchecked")
 	@Override
-    public List<Photo> read() {
-        return getCurrentSession().getNamedQuery("Photo.selectPhotosWithDetails").list();
+    public List<Photo> findAll() {
+        return em.createQuery("select distinct p from Photo p left join fetch p.catalogue left join fetch p.user")
+                .getResultList();
     }
 
     @Override
     public void delete(Photo entity) {
-        getCurrentSession().delete(entity);
+        entity = em.merge(entity);
+        em.remove(entity);
     }
 }

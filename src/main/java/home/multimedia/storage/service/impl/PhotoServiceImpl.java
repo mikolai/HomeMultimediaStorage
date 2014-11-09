@@ -33,13 +33,13 @@ public class PhotoServiceImpl implements PhotoService, InitializingBean {
     @Transactional(readOnly = true)
     @Override
     public Photo getPhoto(int id) {
-        return photoDao.read(id);
+        return photoDao.findById(id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Photo> getPhotos() {
-        return photoDao.read();
+        return photoDao.findAll();
     }
 
     @Transactional

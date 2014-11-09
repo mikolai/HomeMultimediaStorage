@@ -33,13 +33,13 @@ public class RoleServiceImpl implements RoleService, InitializingBean {
     @Transactional(readOnly = true)
     @Override
     public Role getRole(int id) {
-        return roleDao.read(id);
+        return roleDao.findById(id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Role> getRoles() {
-        return roleDao.read();
+        return roleDao.findAll();
     }
 
     @Transactional

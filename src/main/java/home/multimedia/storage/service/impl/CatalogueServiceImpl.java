@@ -33,13 +33,13 @@ public class CatalogueServiceImpl implements CatalogueService, InitializingBean 
     @Transactional(readOnly = true)
     @Override
     public Catalogue getCatalogue(int id) {
-        return catalogueDao.read(id);
+        return catalogueDao.findById(id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Catalogue> getCatalogues() {
-        return catalogueDao.read();
+        return catalogueDao.findAll();
     }
 
     @Transactional

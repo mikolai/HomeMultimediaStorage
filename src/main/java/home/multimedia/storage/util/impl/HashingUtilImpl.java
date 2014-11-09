@@ -1,7 +1,7 @@
 package home.multimedia.storage.util.impl;
 
 import home.multimedia.storage.util.HashingUtil;
-import org.apache.log4j.Logger;
+import org.slf4j.*;
 import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
@@ -12,14 +12,13 @@ import java.security.NoSuchAlgorithmException;
  */
 @Service("hashingUtil")
 public class HashingUtilImpl implements HashingUtil {
+    private static final String HASH_ALGORITHM = "SHA-256";
 
-    private static final String hashAlgorithm = "SHA-256";
-
-    private static final Logger logger = Logger.getLogger(HashingUtilImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(HashingUtilImpl.class);
 
     @Override
     public String hash(String input) {
-        MessageDigest md = getMessageDigest(hashAlgorithm);
+        MessageDigest md = getMessageDigest(HASH_ALGORITHM);
 
         if (md == null) {
             return null;

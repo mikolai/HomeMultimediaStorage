@@ -10,41 +10,42 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 /**
  * Created by nick on 5/18/14.
  */
 @Repository("roleDao")
 public class RoleDaoImpl implements RoleDao {
-
-    private SessionFactory sessionFactory;
-
-    @Autowired
-    public RoleDaoImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    public Session getCurrentSession() {
-        return sessionFactory.getCurrentSession();
-    }
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public void save(Role entity) {
-        getCurrentSession().saveOrUpdate(entity);
+        if (entity.isNew()) {
+            em.persist(entity);
+            em.flush();
+        } else {
+            em.merge(entity);
+        }
     }
 
     @Override
-    public Role read(Integer id) {
-        return (Role) getCurrentSession().get(Role.class, id);
+    public Role findById(Integer id) {
+        return em.find(Role.class, id);
     }
 
     @SuppressWarnings("unchecked")
 	@Override
-    public List<Role> read() {
-        return getCurrentSession().createCriteria(Role.class).list();
+    public List<Role> findAll() {
+        return em.createQuery("select distinct r from Role r order by r.name")
+                .getResultList();
     }
 
     @Override
     public void delete(Role entity) {
-        getCurrentSession().delete(entity);
+        entity = em.merge(entity);
+        em.remove(entity);
     }
 }

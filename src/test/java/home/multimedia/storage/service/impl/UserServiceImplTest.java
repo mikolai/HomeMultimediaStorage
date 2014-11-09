@@ -5,6 +5,7 @@ import home.multimedia.storage.domain.User;
 import home.multimedia.storage.service.RoleService;
 import home.multimedia.storage.service.UserService;
 import home.multimedia.storage.util.HashingUtil;
+import home.multimedia.storage.util.impl.HashingUtilImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,15 +22,13 @@ import static org.junit.Assert.*;
  * Created by nick on 6/9/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:/spring/servlet-context.xml")
+@ContextConfiguration("classpath:/spring/business-config.xml")
 public class UserServiceImplTest {
-
     @Autowired
     private RoleService roleService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private HashingUtil hashingUtil;
+    private HashingUtil hashingUtil = new HashingUtilImpl();
 
     @Ignore
     @Test
@@ -47,7 +46,7 @@ public class UserServiceImplTest {
 
     @Test
     public void canGetUser() {
-        final int expectedId = 1;
+        final Integer expectedId = 1;
         User expectedUser = getUsers().get(expectedId - 1);
 
         User actualUser = userService.getUser(expectedId);
@@ -125,7 +124,7 @@ public class UserServiceImplTest {
 
     @Test
     public void canUpdateUser() {
-        final int userId = 3;
+        final Integer userId = 3;
         final String newUserName = "udpated_user_name";
         String userName;
 

@@ -1,50 +1,33 @@
 package home.multimedia.storage.domain;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Version;
 
 /**
  * Created by nick on 5/13/14.
  */
 @Entity
 @Table(name = "photos", schema = "photo_gallery")
-@NamedQueries({
-        @NamedQuery(name = "Photo.selectPhotoWithDetails",
-                query = "select distinct p from Photo p left join fetch p.catalogue left join fetch p.user where p.id = :id"),
-        @NamedQuery(name = "Photo.selectPhotosWithDetails",
-                query = "select distinct p from Photo p left join fetch p.catalogue left join fetch p.user")
-})
-public class Photo implements Serializable {
-
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -1887176170679156018L;
-	private int id;
+public class Photo extends BaseEntity implements Serializable {
+    @Column(name = "topic")
     private String topic;
+    @Column(name = "description")
     private String description;
+    @Column(name = "tags")
     private String tags;
+    @Column(name = "date")
     private Date date;
+    @Column(name = "photo_data")
     private byte[] photoData;
-    private int version;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "catalogue_id")
     private Catalogue catalogue;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    public Photo(int id, String topic, String description, String tags, Catalogue catalogue, User user, Date date, byte[] photoData) {
+    public Photo(Integer id, String topic, String description, String tags, Catalogue catalogue, User user, Date date, byte[] photoData) {
         this.id = id;
         this.topic = topic;
         this.description = description;
@@ -56,25 +39,13 @@ public class Photo implements Serializable {
     }
 
     public Photo() {
-        this(0, null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null);
     }
 
     public Photo(String topic, String description, String tags, Catalogue catalogue, User user, Date date, byte[] photoData) {
-        this(0, topic, description, tags, catalogue, user, date, photoData);
+        this(null, topic, description, tags, catalogue, user, date, photoData);
     }
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = IDENTITY)
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Column(name = "topic")
     public String getTopic() {
         return topic;
     }
@@ -83,7 +54,6 @@ public class Photo implements Serializable {
         this.topic = topic;
     }
 
-    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -92,7 +62,6 @@ public class Photo implements Serializable {
         this.description = description;
     }
 
-    @Column(name = "tags")
     public String getTags() {
         return tags;
     }
@@ -101,7 +70,6 @@ public class Photo implements Serializable {
         this.tags = tags;
     }
 
-    @Column(name = "date")
     public Date getDate() {
         return date;
     }
@@ -110,7 +78,6 @@ public class Photo implements Serializable {
         this.date = date;
     }
 
-    @Column(name = "photo_data")
     public byte[] getPhotoData() {
         return photoData;
     }
@@ -119,18 +86,6 @@ public class Photo implements Serializable {
         this.photoData = photoData;
     }
 
-    @Version
-    @Column(name = "version")
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "catalogue_id")
     public Catalogue getCatalogue() {
         return catalogue;
     }
@@ -139,8 +94,6 @@ public class Photo implements Serializable {
         this.catalogue = catalogue;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
     public User getUser() {
         return user;
     }
@@ -148,5 +101,4 @@ public class Photo implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
-
 }

@@ -1,51 +1,31 @@
 package home.multimedia.storage.domain;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Version;
 
 /**
  * UserCreated by nick on 5/13/14.
  */
 @Entity
 @Table(name = "users", schema = "security")
-@NamedQueries({
-        @NamedQuery(name = "User.selectUserWithRoles",
-                query = "select distinct u from User u left join fetch u.role where u.id = :id"),
-        @NamedQuery(name = "User.selectUsersWithRoles",
-                query = "select distinct u from User u left join fetch u.role"),
-        @NamedQuery(name = "User.selectUserWithRoleByName",
-                query = "select distinct u from User u left join fetch u.role where u.name = :name")
-})
-public class User implements Serializable {
-
-    private static final long serialVersionUID = 5748453289142349888L;
-
-	private int id;
+public class User extends BaseEntity implements Serializable {
+    @Column(name = "name")
     private String name;
+    @Column(name = "username")
     private String username;
+    @Column(name = "password")
     private String password;
-    private int version;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id")
     private Role role;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Catalogue> catalogues;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Photo> photos;
 
-    public User(int id, String name, String username, String password) {
+    public User(Integer id, String name, String username, String password) {
         this.id = id;
         this.name = name;
         this.username = username;
@@ -55,29 +35,17 @@ public class User implements Serializable {
     }
 
     public User() {
-        this(0, null, null, null);
+        this(null, null, null, null);
     }
 
     public User(String name, String username, String password) {
-        this(0, name, username, password);
+        this(null, name, username, password);
     }
 
     public User(int id) {
         this(id, null, null, null);
     }
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = IDENTITY)
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -86,7 +54,6 @@ public class User implements Serializable {
         this.name = name;
     }
 
-    @Column(name = "username")
     public String getUsername() {
         return username;
     }
@@ -95,7 +62,6 @@ public class User implements Serializable {
         this.username = username;
     }
 
-    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -104,18 +70,6 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    @Version
-    @Column(name = "version")
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "role_id")
     public Role getRole() {
         return role;
     }
@@ -124,7 +78,6 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     public Set<Catalogue> getCatalogues() {
         return catalogues;
     }
@@ -133,7 +86,6 @@ public class User implements Serializable {
         this.catalogues = catalogues;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     public Set<Photo> getPhotos() {
         return photos;
     }

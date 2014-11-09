@@ -25,9 +25,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * Created by nick on 6/30/14.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:/spring/servlet-context.xml")
+@ContextConfiguration("classpath:/spring/business-config.xml")
 public class PhotoServiceImplTest {
-
     @Autowired
     private PhotoService photoService;
     @Autowired
@@ -51,7 +50,7 @@ public class PhotoServiceImplTest {
 
     @Test
     public void canGetPhoto() {
-        final int expectedPhotoId = 1;
+        final Integer expectedPhotoId = 1;
         final Photo expectedPhoto = getPhotos().get(expectedPhotoId - 1);
         final byte[] expectedPhotoData = expectedPhoto.getPhotoData();
 
@@ -121,7 +120,9 @@ public class PhotoServiceImplTest {
     @Test
     public void canAddRemovePhoto() {
         byte[] newBytePhoto = new byte[] {(byte)0x11, (byte)0x43, (byte)0xbc};
-        Photo newPhoto = new Photo("new_photo_topic", "new_description", "new_tag", new Catalogue(3), new User(3), new Date(), newBytePhoto);
+        Catalogue catalogue = catalogueService.getCatalogue(3);
+        User user = userService.getUser(3);
+        Photo newPhoto = new Photo("new_photo_topic", "new_description", "new_tag", catalogue, user, new Date(), newBytePhoto);
 
         photoService.save(newPhoto);
         Photo savedPhoto = photoService.getPhoto(newPhoto.getId());
@@ -146,7 +147,7 @@ public class PhotoServiceImplTest {
 
     @Test
     public void canUpdatePhoto() {
-        final int photoId = 1;
+        final Integer photoId = 1;
         final String updatePhotoTopic = "updated_photo_topic";
         String photoTopic;
 
