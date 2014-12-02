@@ -19,32 +19,32 @@ import javax.persistence.*;
 
 @MappedSuperclass
 public class BaseEntity {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Integer id;
-    @Version
-    @Column(name = "version")
-    protected Integer version;
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected Integer id;
+	@Version
+	@Column(name = "version")
+	protected Integer version;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public Integer getVersion() {
-        return version;
-    }
+	public Integer getVersion() {
+		return version;
+	}
 
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
 
-    public boolean isNew() {
-        return (this.id == null);
-    }
+	public boolean isNew() {
+		return (this.id == null);
+	}
 
 }

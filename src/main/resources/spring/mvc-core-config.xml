@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xsi:schemaLocation="http://www.springframework.org/schema/mvc
-       http://www.springframework.org/schema/mvc/spring-mvc.xsd
-       http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd">
-    <import resource="mvc-view-config.xml" />
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xsi:schemaLocation="http://www.springframework.org/schema/mvc
+	   http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	   http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context.xsd">
+	<import resource="mvc-view-config.xml"/>
 
-    <context:component-scan base-package="home.multimedia.storage" />
+	<context:component-scan base-package="home.multimedia.storage"/>
 
-    <mvc:annotation-driven />
+	<mvc:annotation-driven/>
 
-    <!-- All resources inside folder src/main/webapp/resources are mapped so they can be refered to inside JSP files -->
-    <mvc:resources mapping="/resources/**" location="/resources/"/>
+	<!-- All resources inside folder src/main/webapp/resources are mapped so they can be refered to inside JSP files -->
+	<mvc:resources mapping="/resources/**" location="/resources/"/>
 
-    <!-- Uses WebJars so Javascript and CSS libs can be declared as Maven dependencies (Bootstrap, jQuery...) -->
-    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
-
-    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
-          p:basename="messages/messages"/>
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
+		  p:basename="messages/messages"/>
 </beans>

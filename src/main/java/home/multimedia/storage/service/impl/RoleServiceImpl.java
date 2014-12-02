@@ -11,47 +11,43 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Created by nick on 5/25/14.
- */
 @Service("roleService")
 public class RoleServiceImpl implements RoleService, InitializingBean {
+	private RoleDao roleDao;
 
-    private RoleDao roleDao;
+	@Autowired(required = false)
+	public void setRoleDao(RoleDao roleDao) {
+		this.roleDao = roleDao;
+	}
 
-    @Autowired(required = false)
-    public void setRoleDao(RoleDao roleDao) {
-        this.roleDao = roleDao;
-    }
+	@Transactional
+	@Override
+	public void save(Role role) {
+		roleDao.save(role);
+	}
 
-    @Transactional
-    @Override
-    public void save(Role role) {
-        roleDao.save(role);
-    }
+	@Transactional(readOnly = true)
+	@Override
+	public Role getRole(int id) {
+		return roleDao.findById(id);
+	}
 
-    @Transactional(readOnly = true)
-    @Override
-    public Role getRole(int id) {
-        return roleDao.findById(id);
-    }
+	@Transactional(readOnly = true)
+	@Override
+	public List<Role> getRoles() {
+		return roleDao.findAll();
+	}
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Role> getRoles() {
-        return roleDao.findAll();
-    }
+	@Transactional
+	@Override
+	public void removeRole(Role role) {
+		roleDao.delete(role);
+	}
 
-    @Transactional
-    @Override
-    public void removeRole(Role role) {
-        roleDao.delete(role);
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        if (roleDao == null) {
-            throw new BeanInitializationException("Need set RoleDAO");
-        }
-    }
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		if (roleDao == null) {
+			throw new BeanInitializationException("Need set RoleDAO");
+		}
+	}
 }

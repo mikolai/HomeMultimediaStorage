@@ -11,47 +11,43 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Created by nick on 5/25/14.
- */
 @Service("photoService")
 public class PhotoServiceImpl implements PhotoService, InitializingBean {
+	private PhotoDao photoDao;
 
-    private PhotoDao photoDao;
+	@Autowired(required = false)
+	public void setPhotoDao(PhotoDao photoDao) {
+		this.photoDao = photoDao;
+	}
 
-    @Autowired(required = false)
-    public void setPhotoDao(PhotoDao photoDao) {
-        this.photoDao = photoDao;
-    }
+	@Transactional
+	@Override
+	public void save(Photo photo) {
+		photoDao.save(photo);
+	}
 
-    @Transactional
-    @Override
-    public void save(Photo photo) {
-        photoDao.save(photo);
-    }
+	@Transactional(readOnly = true)
+	@Override
+	public Photo getPhoto(int id) {
+		return photoDao.findById(id);
+	}
 
-    @Transactional(readOnly = true)
-    @Override
-    public Photo getPhoto(int id) {
-        return photoDao.findById(id);
-    }
+	@Transactional(readOnly = true)
+	@Override
+	public List<Photo> getPhotos() {
+		return photoDao.findAll();
+	}
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Photo> getPhotos() {
-        return photoDao.findAll();
-    }
+	@Transactional
+	@Override
+	public void removePhoto(Photo photo) {
+		photoDao.delete(photo);
+	}
 
-    @Transactional
-    @Override
-    public void removePhoto(Photo photo) {
-        photoDao.delete(photo);
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        if (photoDao == null) {
-            throw new BeanInitializationException("Need set PhotoDAO");
-        }
-    }
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		if (photoDao == null) {
+			throw new BeanInitializationException("Need set PhotoDAO");
+		}
+	}
 }

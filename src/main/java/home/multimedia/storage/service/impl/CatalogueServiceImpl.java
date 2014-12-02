@@ -11,47 +11,44 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-/**
- * Created by nick on 5/25/14.
- */
 @Service("catalogueService")
 public class CatalogueServiceImpl implements CatalogueService, InitializingBean {
 
-    private CatalogueDao catalogueDao;
+	private CatalogueDao catalogueDao;
 
-    @Autowired(required = false)
-    public void setCatalogueDao(CatalogueDao catalogueDao) {
-        this.catalogueDao = catalogueDao;
-    }
+	@Autowired(required = false)
+	public void setCatalogueDao(CatalogueDao catalogueDao) {
+		this.catalogueDao = catalogueDao;
+	}
 
-    @Transactional
-    @Override
-    public void save(Catalogue catalogue) {
-        catalogueDao.save(catalogue);
-    }
+	@Transactional
+	@Override
+	public void save(Catalogue catalogue) {
+		catalogueDao.save(catalogue);
+	}
 
-    @Transactional(readOnly = true)
-    @Override
-    public Catalogue getCatalogue(int id) {
-        return catalogueDao.findById(id);
-    }
+	@Transactional(readOnly = true)
+	@Override
+	public Catalogue getCatalogue(int id) {
+		return catalogueDao.findById(id);
+	}
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Catalogue> getCatalogues() {
-        return catalogueDao.findAll();
-    }
+	@Transactional(readOnly = true)
+	@Override
+	public List<Catalogue> getCatalogues() {
+		return catalogueDao.findAll();
+	}
 
-    @Transactional
-    @Override
-    public void removeCatalogue(Catalogue catalogue) {
-        catalogueDao.delete(catalogue);
-    }
+	@Transactional
+	@Override
+	public void removeCatalogue(Catalogue catalogue) {
+		catalogueDao.delete(catalogue);
+	}
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        if (catalogueDao == null) {
-            throw new BeanInitializationException("Need set CatalogueDao");
-        }
-    }
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		if (catalogueDao == null) {
+			throw new BeanInitializationException("Need set CatalogueDao");
+		}
+	}
 }
