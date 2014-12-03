@@ -23,7 +23,7 @@ public class Security {
 		if (logout != null) {
 			model.addObject("msg", "You've been logged out successfully.");
 		}
-		model.setViewName("login/login");
+		model.setViewName("security/login");
 
 		return model;
 	}

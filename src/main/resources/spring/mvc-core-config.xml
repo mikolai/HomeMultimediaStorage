@@ -16,8 +16,9 @@
 
 	<mvc:annotation-driven/>
 
-	<!-- All resources inside folder src/main/webapp/resources are mapped so they can be refered to inside JSP files -->
-	<mvc:resources mapping="/resources/**" location="/resources/"/>
+	<mvc:resources mapping="/assets/js/**" location="/assets/js/" />
+	<mvc:resources mapping="/assets/css/**" location="/assets/css/" />
+	<mvc:resources mapping="/assets/images/**" location="/assets/images/" />
 
 	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
 		  p:basename="messages/messages"/>
