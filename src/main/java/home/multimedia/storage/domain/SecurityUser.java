@@ -8,21 +8,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class SecurityUser extends User implements UserDetails {
-
 	public SecurityUser(User user) {
 		if (user != null) {
 			this.setId(user.getId());
 			this.setName(user.getName());
 			this.setPassword(user.getPassword());
-			this.setRole(user.getRole());
+			this.addRoles(user.getRoles());
 		}
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		Role userRole = this.getRole();
-		if (userRole != null) {
+		Collection<GrantedAuthority> authorities = new ArrayList<>();
+		for (Role userRole : this.getRoles()) {
 			SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.getName());
 			authorities.add(authority);
 		}

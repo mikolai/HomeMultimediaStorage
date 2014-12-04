@@ -14,9 +14,11 @@ public class User extends BaseEntity implements Serializable {
 	private String username;
 	@Column(name = "password")
 	private String password;
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "role_id")
-	private Role role;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_roles", schema = "security",
+			joinColumns = {@JoinColumn(name = "user_id", nullable = false, updatable = false)},
+			inverseJoinColumns = {@JoinColumn(name = "role_id", nullable = false, updatable = false)})
+	private Set<Role> roles;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Catalogue> catalogues;
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
@@ -27,8 +29,9 @@ public class User extends BaseEntity implements Serializable {
 		this.name = name;
 		this.username = username;
 		this.password = password;
-		this.catalogues = new HashSet<Catalogue>();
-		this.photos = new HashSet<Photo>();
+		this.roles = new HashSet<>();
+		this.catalogues = new HashSet<>();
+		this.photos = new HashSet<>();
 	}
 
 	public User() {
@@ -67,12 +70,28 @@ public class User extends BaseEntity implements Serializable {
 		this.password = password;
 	}
 
-	public Role getRole() {
-		return role;
+	public Set<Role> getRoles() {
+		return new HashSet<>(roles);
 	}
 
-	public void setRole(Role role) {
-		this.role = role;
+	public void addRole(Role role) {
+		if (!this.roles.contains(role)) {
+			this.roles.add(role);
+			role.addUser(this);
+		}
+	}
+
+	public void addRoles(Set<Role> roles) {
+		for (Role role : roles) {
+			this.addRole(role);
+		}
+	}
+
+	public void removeRole(Role role) {
+		if (this.roles.contains(role)) {
+			this.roles.remove(role);
+			role.removeUser(this);
+		}
 	}
 
 	public Set<Catalogue> getCatalogues() {
@@ -89,5 +108,29 @@ public class User extends BaseEntity implements Serializable {
 
 	public void setPhotos(Set<Photo> photos) {
 		this.photos = photos;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof User)) return false;
+		if (!super.equals(o)) return false;
+
+		User user = (User) o;
+
+		if (name != null ? !name.equals(user.name) : user.name != null) return false;
+		if (password != null ? !password.equals(user.password) : user.password != null) return false;
+		if (username != null ? !username.equals(user.username) : user.username != null) return false;
+
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		int result = super.hashCode();
+		result = 31 * result + (name != null ? name.hashCode() : 0);
+		result = 31 * result + (username != null ? username.hashCode() : 0);
+		result = 31 * result + (password != null ? password.hashCode() : 0);
+		return result;
 	}
 }

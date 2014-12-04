@@ -26,8 +26,8 @@ public class Catalogue extends BaseEntity implements Serializable {
 		this.parent = parent;
 		this.name = name;
 		this.user = user;
-		this.childrens = new HashSet<Catalogue>();
-		this.photos = new HashSet<Photo>();
+		this.childrens = new HashSet<>();
+		this.photos = new HashSet<>();
 	}
 
 	public Catalogue(Catalogue parent, String name, User user) {

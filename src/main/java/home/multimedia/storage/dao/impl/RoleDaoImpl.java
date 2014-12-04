@@ -30,13 +30,19 @@ public class RoleDaoImpl implements RoleDao {
 
 	@Override
 	public Role findById(Integer id) {
-		return em.find(Role.class, id);
+		List<Role> entities = em.createQuery("select distinct r from Role r left join fetch r.users where r.id = :id")
+				.setParameter("id", id)
+				.getResultList();
+		if (entities.size() == 0) {
+			return null;
+		}
+		return entities.get(0);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Role> findAll() {
-		return em.createQuery("select distinct r from Role r order by r.name")
+		return em.createQuery("select distinct r from Role r left join fetch r.users order by r.name")
 				.getResultList();
 	}
 

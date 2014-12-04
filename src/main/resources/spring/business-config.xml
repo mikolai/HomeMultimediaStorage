@@ -26,7 +26,6 @@
 				  p:databasePlatform="${jpa.dialect}"
 				  p:showSql="${jpa.showSql}"/>
 		</property>
-		<property name="persistenceUnitName" value="petclinic"/>
 		<property name="packagesToScan" value="home.multimedia.storage"/>
 	</bean>
 
