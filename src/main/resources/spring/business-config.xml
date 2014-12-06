@@ -35,10 +35,6 @@
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager"
 		  p:entityManagerFactory-ref="entityManagerFactory"/>
 
-	<!--
-		Post-processor to perform exception translation on @Repository classes (from native
-		exceptions such as JPA PersistenceExceptions to Spring's DataAccessException hierarchy).
-	-->
 	<bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
 	<context:component-scan base-package="home.multimedia.storage.dao.impl"/>
